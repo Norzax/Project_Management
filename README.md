@@ -50,7 +50,7 @@ Project Management là một ứng dụng đơn giản được xây dựng trê
 ## Đóng Góp
 
 Chúng tôi rất hoan nghênh sự đóng góp từ cộng đồng. Nếu bạn muốn đóng góp vào dự án, vui lòng 
-[liên hệ email sau](mailto:giangbaoluan5@.com)
+[liên hệ qua email](mailto:giangbaoluan5@.com)
 
 ---
 © 2023 GiangBaoLuan Project-Management.
