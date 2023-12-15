@@ -7,7 +7,7 @@
 Project Management là một ứng dụng đơn giản được xây dựng trên nền tảng Java và Spring Boot. Ứng dụng cung cấp các tính năng cơ bản để quản lý các dự án cá nhân hoặc tổ chức.
 
 ## Sơ đồ ERD
-[Thiết kế dự án][https://drive.google.com/file/d/1QIW9Akdt6hKP1Oe9twGT9sVH1lyzSkzY/view?usp=sharing]
+[Thiết kế dự án](https://drive.google.com/file/d/1QIW9Akdt6hKP1Oe9twGT9sVH1lyzSkzY/view?usp=sharing)
 
 ## Hướng Dẫn Cài Đặt
 
