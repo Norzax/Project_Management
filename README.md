@@ -6,6 +6,9 @@
 
 Project Management là một ứng dụng đơn giản được xây dựng trên nền tảng Java và Spring Boot. Ứng dụng cung cấp các tính năng cơ bản để quản lý các dự án cá nhân hoặc tổ chức.
 
+## Sơ đồ ERD
+[Thiết kế dự án](https://drive.google.com/file/d/1QIW9Akdt6hKP1Oe9twGT9sVH1lyzSkzY/view?usp=sharing)
+
 ## Hướng Dẫn Cài Đặt
 
 ### Yêu Cầu
@@ -46,7 +49,8 @@ Project Management là một ứng dụng đơn giản được xây dựng trê
 
 ## Đóng Góp
 
-Chúng tôi rất hoan nghênh sự đóng góp từ cộng đồng. Nếu bạn muốn đóng góp vào dự án, vui lòng liên hệ đến email: giangbaoluan5@gmail.com.
+Chúng tôi rất hoan nghênh sự đóng góp từ cộng đồng. Nếu bạn muốn đóng góp vào dự án, vui lòng 
+[liên hệ qua email](mailto:giangbaoluan5@.com)
 
 ---
 © 2023 GiangBaoLuan Project-Management.
