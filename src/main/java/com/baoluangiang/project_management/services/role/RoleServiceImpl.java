@@ -1,5 +1,5 @@
 package com.baoluangiang.project_management.services.role;
 
-public class RoleServiceImpl {
+public class RoleServiceImpl implements RoleService{
 
 }

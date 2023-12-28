@@ -1,5 +1,8 @@
 package com.baoluangiang.project_management.repositories;
 
-public interface AttachmentRepository {
+import com.baoluangiang.project_management.entities.Attachment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AttachmentRepository extends JpaRepository<Attachment, Long> {
 
 }
