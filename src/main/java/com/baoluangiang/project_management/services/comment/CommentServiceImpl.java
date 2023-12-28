@@ -1,5 +1,5 @@
 package com.baoluangiang.project_management.services.comment;
 
-public class CommentServiceImpl {
+public class CommentServiceImpl implements CommentService{
 
 }

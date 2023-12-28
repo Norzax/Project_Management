@@ -1,0 +1,12 @@
+
+W	java:S125"<This block of commented-out lines of code should be removed.(ÏÚ¨!8İ´ì†Ë1
+R
+java:S1128"0Remove this unused import 'jakarta.persistence'.(Î«Ô§úÿÿÿÿ8İ´ì†Ë1
+X
+java:S1128"6Remove this unused import 'lombok.AllArgsConstructor'.(´œ¾öùÿÿÿÿ8İ´ì†Ë1
+H
+java:S1128"+Remove this unused import 'lombok.Builder'.(§’Ğß8İ´ì†Ë1
+J
+java:S1128"(Remove this unused import 'lombok.Data'.(÷í«ÿÿÿÿÿ8İ´ì†Ë1
+R
+java:S1128"5Remove this unused import 'lombok.NoArgsConstructor'.(¸¨›8İ´ì†Ë1

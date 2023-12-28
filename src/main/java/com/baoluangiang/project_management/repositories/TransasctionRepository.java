@@ -1,4 +1,4 @@
 package com.baoluangiang.project_management.repositories;
 
-public interface BudgetTransasctionRepository {
+public interface TransasctionRepository {
 }
