@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,4 +29,7 @@ public class Role {
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private RoleGroup roleGroup;
+
+    @OneToMany(mappedBy = "role")
+    private Set<ProjectRoleUser> projectRoleUsers = new HashSet<>();
 }

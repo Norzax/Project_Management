@@ -1,4 +1,7 @@
 package com.baoluangiang.project_management.repositories;
 
-public interface CurrencyRepository {
+import com.baoluangiang.project_management.entities.Currency;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CurrencyRepository extends JpaRepository<Currency, Long> {
 }
