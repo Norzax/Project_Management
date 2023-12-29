@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -52,4 +54,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "project")
+    private Set<ProjectRoleUser> projectRoleUsers = new HashSet<>();
 }
