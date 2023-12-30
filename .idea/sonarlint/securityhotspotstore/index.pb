@@ -101,8 +101,6 @@ x
 Hsrc/main/java/com/baoluangiang/project_management/entities/Currency.java,a\9\a914fefb5502191bdf0565bb6e5cb9d9702832ff
 u
 Esrc/main/java/com/baoluangiang/project_management/entities/Phone.java,9\4\948f4dc1215e82452640122b5c67a5ca9a31f119
-
-Osrc/main/java/com/baoluangiang/project_management/entities/ProjectUserRole.java,1\2\1292a6b95799c36f1291943c3d29b2807fbcc5e7
 É
 Ssrc/main/java/com/baoluangiang/project_management/repositories/PhoneRepository.java,4\e\4edd8bc368624300977c9d8d644f54323b825cb5
 Ü
@@ -113,7 +111,11 @@ Wsrc/main/java/com/baoluangiang/project_management/repositories/RoleGroupReposit
 Osrc/main/java/com/baoluangiang/project_management/entities/ProjectRoleUser.java,a\8\a81b0fae5f794da423c76059ea3e74574eec1b7f
 ç
 ]src/main/java/com/baoluangiang/project_management/repositories/TransactionTypeRepository.java,d\5\d597a00bf121484ec1fd7d660751db319b965af5
-ä
-Zsrc/main/java/com/baoluangiang/project_management/repositories/TransasctionRepository.java,7\1\710cea93ef7b7cc09ef856c9d87102c322740f37
 â
 Ysrc/main/java/com/baoluangiang/project_management/repositories/TransactionRepository.java,9\5\951e5140bd35b8ff91d255d160a96ec63f06a761
+z
+Jsrc/main/java/com/baoluangiang/project_management/entities/Permission.java,3\a\3abea278c921069a3c5b5514adebadc298f84b43
+Å
+Qsrc/main/java/com/baoluangiang/project_management/entities/ProjectPermission.java,2\2\22e908bfa1408c9cf8b53bdca4e4f8e7a1b24791
+~
+Nsrc/main/java/com/baoluangiang/project_management/entities/UserPermission.java,7\e\7e97fea736fa7e126449915e4269f68aec8cc605
