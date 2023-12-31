@@ -11,12 +11,15 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select u from user u where u.username = :username")
+    @Query("select u from user u left join fetch u.information left join fetch u.phones where u.id = :userId")
+    Optional<User> findById(@Param("userId") Long userId);
+
+    @Query("select u from user u left join fetch u.information left join fetch u.phones where u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
 
     @Query("select u from user u join information i join phone p where u.username = :username")
     Optional<User> findAllInfoByUsername(@Param("username") String username);
 
-    @Query("select u from user u join information i join phone p")
-    Optional<List<User>> findAllInfo();
+    @Query("select u from user u left join fetch u.information left join fetch u.phones")
+    List<User> findAllUser();
 }

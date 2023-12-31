@@ -1,9 +1,7 @@
 package com.baoluangiang.project_management.services.user;
 
 import com.baoluangiang.project_management.entities.User;
-import com.baoluangiang.project_management.models.dtos.PhoneDTOForUserDTO;
-import com.baoluangiang.project_management.models.dtos.UserDTO;
-import com.baoluangiang.project_management.models.dtos.UserDetailsDTO;
+import com.baoluangiang.project_management.models.dtos.*;
 import com.baoluangiang.project_management.models.payloads.BaseResponse;
 import com.baoluangiang.project_management.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -84,69 +82,61 @@ public class UserServiceImpl implements UserService{
     @Override
     public BaseResponse<List<UserDTO>> getAll() {
         try {
-            List<User> list = userRepository.findAll();
+            List<User> userList = userRepository.findAllUser();
 
-            if (list.isEmpty()) {
+            if (userList.isEmpty()) {
                 return BaseResponse.<List<UserDTO>>builder()
                         .status(HttpStatus.NOT_FOUND.value())
                         .message("class: UserServiceImpl + func: getAll() + return 1")
                         .build();
             }
 
-            List<UserDTO> listRes = list.stream()
+            List<UserDTO> userDTOList = userList.stream()
                     .map(userEntity -> {
-                        UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
-                        List<PhoneDTOForUserDTO> listPhone = userEntity.getPhones().stream()
-                                .map(phoneEntity -> modelMapper.map(phoneEntity, PhoneDTOForUserDTO.class)).toList();
-                        userDTO.setPhones(listPhone);
-                        return userDTO;
+                        List<PhoneDTO> phoneDTOList = userEntity.getPhones().stream()
+                                .map(phoneEntity -> {
+                                    PhoneDTO phoneDTO = modelMapper.map(phoneEntity, PhoneDTO.class);
+                                    phoneDTO.setId(null);
+                                    phoneDTO.setUser(null);
+                                    return phoneDTO;
+                                })
+                                .toList();
+
+                        InformationDTO informationDTO = modelMapper.map(userEntity.getInformation(), InformationDTO.class);
+                        informationDTO.setUser(null);
+                        informationDTO.setId(null);
+
+                        return UserDTO.builder()
+                                .id(userEntity.getId())
+                                .username(userEntity.getUsername())
+                                .information(informationDTO)
+                                .phones(phoneDTOList)
+                                .build();
                     }).toList();
 
             return BaseResponse.<List<UserDTO>>builder()
                     .status(HttpStatus.OK.value())
                     .message("class: UserServiceImpl + func: getAll() + return 2")
-                    .data(listRes)
+                    .data(userDTOList)
                     .build();
 
         } catch (Exception e) {
             return BaseResponse.<List<UserDTO>>builder()
                     .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .data(null)
-                    .message("class: UserServiceImpl + func: getAll() + return 3")
+                    .message("class: UserServiceImpl + func: getAll() + return 3 " + e.getMessage())
                     .build();
         }
     }
 
     @Override
     public BaseResponse<UserDTO> getById(Long userId) {
-        try {
-            Optional<User> foundUser = userRepository.findById(userId);
-
-            if (foundUser.isEmpty()) {
-                return BaseResponse.<UserDTO>builder()
-                        .status(HttpStatus.OK.value())
-                        .message("class: UserServiceImpl + func: getById() + return 1")
-                        .data(null)
-                        .build();
-            }
-
-            return BaseResponse.<UserDTO>builder()
-                    .status(HttpStatus.OK.value())
-                    .message("class: UserServiceImpl + func: getById() + return 2")
-                    .data(modelMapper.map(foundUser, UserDTO.class))
-                    .build();
-        } catch (Exception e) {
-            return BaseResponse.<UserDTO>builder()
-                    .status(HttpStatus.OK.value())
-                    .data(null)
-                    .message("class: UserServiceImpl + func: getById() + return 3")
-                    .build();
-        }
+        return findUserByInformation(userRepository.findById(userId));
     }
 
     @Override
-    public BaseResponse<UserDTO> getByUsername() {
-        return null;
+    public BaseResponse<UserDTO> getByUsername(String username) {
+        return findUserByInformation(userRepository.findByUsername(username));
     }
 
     @Override
@@ -155,17 +145,56 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public BaseResponse<?> inActiveUser(Long userId) {
+    public BaseResponse<Void> inactiveUser(Long userId) {
         return null;
     }
 
     @Override
-    public BaseResponse<?> activeUser(String username) {
+    public BaseResponse<Void> activeUser(String username) {
         return null;
     }
 
     @Override
     public BaseResponse<UserDTO> registerUser(UserDTO registerInformation) {
         return null;
+    }
+
+    public BaseResponse<UserDTO> findUserByInformation(Optional<User> foundUser){
+        try {
+            if (foundUser.isEmpty()) {
+                return BaseResponse.<UserDTO>builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .message("class: UserServiceImpl + func: getById() + return 1")
+                        .data(null)
+                        .build();
+            }
+
+            List<PhoneDTO> phoneDTOList = foundUser.get().getPhones().stream()
+                    .map(phoneEntity -> {
+                        PhoneDTO phoneDTO = modelMapper.map(phoneEntity, PhoneDTO.class);
+                        phoneDTO.setId(null);
+                        phoneDTO.setUser(null);
+                        return phoneDTO;
+                    })
+                    .toList();
+
+            UserDTO userDTO = modelMapper.map(foundUser, UserDTO.class);
+            userDTO.setPhones(phoneDTOList);
+            userDTO.getInformation().setUser(null);
+            userDTO.getInformation().setId(null);
+
+            return BaseResponse.<UserDTO>builder()
+                    .status(HttpStatus.OK.value())
+                    .message("class: UserServiceImpl + func: getById() + return 2")
+                    .data(userDTO)
+                    .build();
+
+        } catch (Exception e) {
+            return BaseResponse.<UserDTO>builder()
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .data(null)
+                    .message("class: UserServiceImpl + func: getById() + return 3")
+                    .build();
+        }
     }
 }
