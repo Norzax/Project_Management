@@ -27,6 +27,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
     @OneToOne(mappedBy = "user")
     private Information information;
 
