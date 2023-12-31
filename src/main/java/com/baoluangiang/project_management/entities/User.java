@@ -39,6 +39,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Attachment> attachments;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Task> tasks = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private Set<UserProjectPermission> userProjectPermissions = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserTaskPermission> userTaskPermissions = new HashSet<>();
 }

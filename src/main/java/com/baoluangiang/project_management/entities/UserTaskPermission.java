@@ -6,23 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role_group")
-@Entity(name = "role_group")
-public class RoleGroup {
+@Entity
+@Table(name = "user_task_permission")
+public class UserTaskPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "group_name")
-    private String groupName;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private RoleGroup roleGroup;
+    @JoinColumn(name = "permission_id")
+    private Permission permission;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

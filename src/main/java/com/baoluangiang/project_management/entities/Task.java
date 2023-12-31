@@ -52,11 +52,6 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<Transaction> transactions;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_tasks",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "task")
+    private Set<UserTaskPermission> userTaskPermissions = new HashSet<>();
 }

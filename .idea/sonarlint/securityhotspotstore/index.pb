@@ -119,3 +119,9 @@ Jsrc/main/java/com/baoluangiang/project_management/entities/Permission.java,3\a
 Qsrc/main/java/com/baoluangiang/project_management/entities/ProjectPermission.java,2\2\22e908bfa1408c9cf8b53bdca4e4f8e7a1b24791
 ~
 Nsrc/main/java/com/baoluangiang/project_management/entities/UserPermission.java,7\e\7e97fea736fa7e126449915e4269f68aec8cc605
+‚
+Rsrc/main/java/com/baoluangiang/project_management/entities/UserTaskPermisison.java,d\c\dcc33d14e562321c31c3f3b3aceabb0d0ee48934
+‚
+Rsrc/main/java/com/baoluangiang/project_management/entities/UserTaskPermission.java,9\f\9fcb92e2d36cefc422c9f775db222a7a9cb25e9d
+…
+Usrc/main/java/com/baoluangiang/project_management/entities/UserProjectPermission.java,9\6\966d4f15f1dd7452ab8f9f6dc1f3d15ed88106f0
