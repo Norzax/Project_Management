@@ -1,6 +1,6 @@
 package com.baoluangiang.project_management.models.dtos;
 
-import com.baoluangiang.project_management.entities.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +12,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     private Long id;
     private String username;
-    private InformationDTOForUserDTO information;
-    private List<PhoneDTOForUserDTO> phones;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private InformationDTO information;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<PhoneDTO> phones;
 }
