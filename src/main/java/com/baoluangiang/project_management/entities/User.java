@@ -1,5 +1,6 @@
 package com.baoluangiang.project_management.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,4 +48,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<UserTaskPermission> userTaskPermissions = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
 }

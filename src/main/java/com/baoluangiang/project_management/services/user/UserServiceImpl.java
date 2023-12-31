@@ -56,4 +56,9 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<?> activeUser(String username) {
         return null;
     }
+
+    @Override
+    public BaseResponse<UserDTO> registerUser(UserDTO registerInformation) {
+        return null;
+    }
 }
