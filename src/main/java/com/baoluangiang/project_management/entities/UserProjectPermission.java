@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "project_role_user")
-public class ProjectRoleUser {
+@Table(name = "user_project_permission")
+public class UserProjectPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +22,8 @@ public class ProjectRoleUser {
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "permission_id")
+    private Permission permission;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

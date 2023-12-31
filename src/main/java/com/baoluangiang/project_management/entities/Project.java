@@ -56,5 +56,5 @@ public class Project {
     private List<Transaction> transactions;
 
     @OneToMany(mappedBy = "project")
-    private Set<ProjectRoleUser> projectRoleUsers = new HashSet<>();
+    private Set<UserProjectPermission> userProjectPermissions = new HashSet<>();
 }
