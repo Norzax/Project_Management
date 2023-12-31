@@ -1,0 +1,14 @@
+
+p
+java:S1128"NRemove this unused import 'com.baoluangiang.project_management.entities.User'.(Þ«ÔŽùÿÿÿÿ8¿¿¸…Ì1
+R
+java:S1128"0Remove this unused import 'jakarta.persistence'.(Î«Ô§úÿÿÿÿ8÷¬¸…Ì1
+L
+java:S1068	"/Remove this unused "displayName" private field.(¦Àç¨8É…¸…Ì1
+D
+java:S1068
+"'Remove this unused "bio" private field.(·ðôß8Ê…¸…Ì1
+N
+java:S1068",Remove this unused "birthday" private field.(¨›ÒÈüÿÿÿÿ8Ê…¸…Ì1
+J
+java:S1068"-Remove this unused "avatarUrl" private field.(³˜¬ö8®˜¸…Ì1
