@@ -9,7 +9,7 @@ public interface UserService {
     BaseResponse<Long> getLoggedInUserId();
     BaseResponse<UserDTO> getLoggedInUserInformation();
     BaseResponse<List<UserDTO>> getAll();
-    BaseResponse<UserDTO> getById();
+    BaseResponse<UserDTO> getById(Long userId);
     BaseResponse<UserDTO> getByUsername();
     BaseResponse<UserDTO> updateUserInformation(UserDTO updatedInformation);
     BaseResponse<?> inActiveUser(Long userId);
