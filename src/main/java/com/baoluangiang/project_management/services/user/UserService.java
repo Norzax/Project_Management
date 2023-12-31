@@ -14,4 +14,5 @@ public interface UserService {
     BaseResponse<UserDTO> updateUserInformation(UserDTO updatedInformation);
     BaseResponse<?> inActiveUser(Long userId);
     BaseResponse<?> activeUser(String username);
+    BaseResponse<UserDTO> registerUser(UserDTO registerInformation);
 }
