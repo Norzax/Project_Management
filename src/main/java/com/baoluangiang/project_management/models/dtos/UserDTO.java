@@ -1,5 +1,6 @@
 package com.baoluangiang.project_management.models.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,12 @@ import java.util.List;
 public class UserDTO {
     private Long id;
     private String username;
+
+    @JsonIgnore
+    private String password;
+
+    @JsonIgnore
+    private boolean isActive;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private InformationDTO information;
