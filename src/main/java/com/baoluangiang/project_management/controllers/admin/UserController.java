@@ -60,7 +60,7 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<BaseResponse<UserUpdateResponse>> updateById(@PathVariable("id") Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
-        BaseResponse<UserUpdateResponse> response = userService.updateUserInformation(userId, userUpdateRequest);
+        BaseResponse<UserUpdateResponse> response = userService.updateUser(userId, userUpdateRequest);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }

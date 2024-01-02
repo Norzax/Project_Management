@@ -37,35 +37,46 @@ public class InformationServiceImpl implements InformationService{
     }
 
     @Override
-    public BaseResponse<InformationUpdateResponse> updateUserInformation(Long userId, InformationUpdateRequest updatedInformation) {
+    public BaseResponse<InformationUpdateResponse> updateInformation(Long userId, InformationUpdateRequest updateInformation) {
         Optional<Information> informationOptional = informationRepository.findInformationByUserId(userId);
-        if (informationOptional.isEmpty()) {
+        Information existingInformation;
+        if (informationOptional.isPresent()) {
+            existingInformation = informationOptional.get();
+        } else {
             return BaseResponse.<InformationUpdateResponse>builder()
-                    .message("class: InformationServiceImpl + func: updateUserInformation(Long userId, UserDTO updatedInformation) + return 1")
-                    .data(null)
+                    .message("class: InformationServiceImpl + func: updateInformation(Long userId, UserDTO updatedInformation) + return 1")
                     .status(HttpStatus.NOT_FOUND.value())
                     .build();
         }
 
-        InformationDTO existingInformation = modelMapper.map(informationOptional.get(), InformationDTO.class);
-        if(!updatedInformation.getBio().equals(existingInformation.getBio()) &&
-                updatedInformation.getBio() != null) {
-            existingInformation.setBio(updatedInformation.getBio());
-        } else if(!updatedInformation.getBirthday().equals(existingInformation.getBirthday()) &&
-                updatedInformation.getBirthday() != null) {
-            existingInformation.setBirthday(updatedInformation.getBirthday());
-        } else if(!updatedInformation.getAvatarUrl().equals(existingInformation.getAvatarUrl()) &&
-                updatedInformation.getAvatarUrl() != null) {
-            existingInformation.setAvatarUrl(updatedInformation.getAvatarUrl());
-        } else if(!updatedInformation.getDisplayName().equals(existingInformation.getDisplayName()) &&
-                updatedInformation.getDisplayName() != null) {
-            existingInformation.setDisplayName(updatedInformation.getDisplayName());
+        // Update display name
+        if(!updateInformation.getDisplayName().equals(existingInformation.getDisplayName()) &&
+                updateInformation.getDisplayName() != null) {
+            existingInformation.setDisplayName(updateInformation.getDisplayName());
         }
 
-        informationRepository.save(modelMapper.map(existingInformation, Information.class));
+        // Update bio
+        if(!updateInformation.getBio().equals(existingInformation.getBio()) &&
+                updateInformation.getBio() != null) {
+            existingInformation.setBio(updateInformation.getBio());
+        }
+
+        // Update birthday
+        if(!updateInformation.getBirthday().equals(existingInformation.getBirthday()) &&
+                updateInformation.getBirthday() != null) {
+            existingInformation.setBirthday(updateInformation.getBirthday());
+        }
+
+        // Update avatar url
+        if(!updateInformation.getAvatarUrl().equals(existingInformation.getAvatarUrl()) &&
+                updateInformation.getAvatarUrl() != null) {
+            existingInformation.setAvatarUrl(updateInformation.getAvatarUrl());
+        }
+
+        InformationUpdateResponse updatedInformation = modelMapper.map(informationRepository.save(existingInformation), InformationUpdateResponse.class);
         return BaseResponse.<InformationUpdateResponse>builder()
                 .message("class: UserServiceImpl + func: updateUserInformation(Long userId, InformationDTO updatedInformation) + return 2")
-                .data(modelMapper.map(existingInformation, InformationUpdateResponse.class))
+                .data(updatedInformation)
                 .status(HttpStatus.OK.value())
                 .build();
     }

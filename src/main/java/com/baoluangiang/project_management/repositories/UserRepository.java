@@ -13,10 +13,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from user u left join fetch u.information left join fetch u.phones where u.id = :userId")
     Optional<List<User>> findUserById(@Param("userId") Long userId);
-
     @Query("select u from user u left join fetch u.information left join fetch u.phones where u.username = :username")
     Optional<List<User>> findUserByUsername(@Param("username") String username);
-
     @Query("select u from user u left join fetch u.information left join fetch u.phones")
     Optional<List<User>> findAllUser();
     boolean existsByUsername(String username);
