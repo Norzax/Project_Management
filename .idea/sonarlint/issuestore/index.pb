@@ -129,10 +129,6 @@ Psrc/main/java/com/baoluangiang/project_management/services/user/UserService.jav
 Ssrc/main/java/com/baoluangiang/project_management/models/payloads/BaseResponse.java,8\2\82d140d6a96fbea09fd1781b3e9cbaefe03735d0
 z
 Jsrc/main/java/com/baoluangiang/project_management/models/dtos/UserDTO.java,6\2\62d9546ed4957c05319a6234db814dab95fa561b
-ä
-Zsrc/main/java/com/baoluangiang/project_management/services/user/UserDetailServiceImpl.java,6\5\657d03bfa3039304a4624db2cf712dd7ca21d3b3
-Å
-Qsrc/main/java/com/baoluangiang/project_management/models/dtos/UserDetailsDTO.java,a\b\abcd4da650a8656868e2f556ca449adc429d499a
 {
 Ksrc/main/java/com/baoluangiang/project_management/models/dtos/PhoneDTO.java,6\7\676fed7b7d44ffe2ae1cbd8b984df966145f3e8e
 á
@@ -167,3 +163,7 @@ Zsrc/main/java/com/baoluangiang/project_management/models/payloads/PhoneUpdateRe
 Rsrc/main/java/com/baoluangiang/project_management/services/phone/PhoneService.java,f\d\fd15d6adb13f31f9454829aab52a7f342642b2a8
 ä
 Zsrc/main/java/com/baoluangiang/project_management/controllers/admin/ProjectController.java,4\6\462822386eb29e37a9630c69e92948c6c9113ec7
+ä
+Zsrc/main/java/com/baoluangiang/project_management/models/payloads/UserRegisterRequest.java,1\3\131ac48c9b6f13fc35d3663da23836089452f6d7
+ã
+[src/main/java/com/baoluangiang/project_management/models/payloads/UserRegisterResponse.java,7\e\7e6719208159133a969cf940345840e1bfe30c7a

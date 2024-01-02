@@ -18,6 +18,9 @@ public class UserUpdateResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String username;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String email;
+
     @JsonIgnore
     private String oldPassword;
 

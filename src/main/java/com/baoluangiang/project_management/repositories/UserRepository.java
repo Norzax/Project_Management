@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from user u left join fetch u.information left join fetch u.phones")
     Optional<List<User>> findAllUser();
     boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

@@ -89,9 +89,8 @@ public class PhoneServiceImpl implements PhoneService{
             }
         }
         optionalPhones = phoneRepository.findPhoneByUserId(userId);
-        List<PhoneUpdateResponse> updatedPhone = optionalPhones.stream()
+        List<PhoneUpdateResponse> updatedPhone = optionalPhones.get().stream()
                 .map(phoneEntity -> modelMapper.map(phoneEntity, PhoneUpdateResponse.class)).toList();
-
 
         return BaseResponse.<List<PhoneUpdateResponse>>builder()
                 .message("class: PhoneServiceImpl + func: updatePhone(Long userId, List<PhoneUpdateRequest> updatedPhones) + return success")
