@@ -20,5 +20,4 @@ public interface UserService {
     BaseResponse<Void> inactiveUser(Long userId);
     BaseResponse<Void> activeUser(String username);
     BaseResponse<UserDTO> registerUser(UserDTO registerInformation);
-    BaseResponse<List<UserDTO>> findUserByInformation(List<User> userList);
 }

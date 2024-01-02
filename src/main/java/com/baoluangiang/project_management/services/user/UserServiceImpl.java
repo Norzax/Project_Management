@@ -21,17 +21,17 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
+    private final UserRepository userRepository;
     private final InformationService informationService;
     private final PhoneService phoneService;
-    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(InformationService informationService, PhoneService phoneService, UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, InformationService informationService, PhoneService phoneService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.informationService = informationService;
         this.phoneService = phoneService;
-        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<UserUpdateResponse> updateUser(Long userId, UserUpdateRequest updateInformation) {
         Optional<List<User>> userOptional = userRepository.findUserById(userId);
         User existingUser;
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return BaseResponse.<UserUpdateResponse>builder()
                     .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return 1")
                     .status(HttpStatus.NOT_FOUND.value())
@@ -143,75 +143,66 @@ public class UserServiceImpl implements UserService{
         UserUpdateResponse updatedUserResponse = modelMapper.map(existingUser, UserUpdateResponse.class);
 
         // Update username
-        if(updateInformation.getUsername() != null){
-            if(!userRepository.existsByUsername(updateInformation.getUsername()) && !updateInformation.getUsername().equals(existingUser.getUsername())) {
-                existingUser.setUsername(updateInformation.getUsername());
-            } else if(userRepository.existsByUsername(updateInformation.getUsername())) {       // New username already exist
-                return BaseResponse.<UserUpdateResponse>builder()
-                        .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return 2")
-                        .status(HttpStatus.OK.value())
-                        .build();
-            } else if (updateInformation.getUsername().equals(existingUser.getUsername())) {    // New username same with the old one
-                return BaseResponse.<UserUpdateResponse>builder()
-                        .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return 3")
-                        .status(HttpStatus.OK.value())
-                        .build();
-            }
-
-            // Set username into response
-            updatedUserResponse.setUsername(updateInformation.getUsername());
+        BaseResponse<User> updatedUsername = updateUsername(updateInformation, existingUser);
+        if(updatedUsername.getStatus() != HttpStatus.OK.value()) {
+            return BaseResponse.<UserUpdateResponse>builder()
+                    .message(updatedUsername.getMessage())
+                    .status(updatedUsername.getStatus())
+                    .build();
         }
+        existingUser = updatedUsername.getData();
+        updatedUserResponse.setUsername(existingUser.getUsername());
+
+        // Update email
+        BaseResponse<User> updatedEmail = updateEmail(updateInformation, existingUser);
+        if(updatedEmail.getStatus() != HttpStatus.OK.value()) {
+            return BaseResponse.<UserUpdateResponse>builder()
+                    .message(updatedEmail.getMessage())
+                    .status(updatedEmail.getStatus())
+                    .build();
+        }
+        existingUser = updatedEmail.getData();
+        updatedUserResponse.setEmail(existingUser.getEmail());
 
         // Update password
-        if(updateInformation.getOldPassword() != null) {
-            if(updateInformation.getNewPassword() != null &&
-                    passwordEncoder.matches(updateInformation.getOldPassword(), existingUser.getPassword()) &&
-                    updateInformation.getNewPassword().equals(updateInformation.getConfirmNewPassword())) {
-                existingUser.setPassword(passwordEncoder.encode(updateInformation.getNewPassword()));
-            } else if (!passwordEncoder.matches(updateInformation.getOldPassword(), existingUser.getPassword())) {      // Wrong password
-                return BaseResponse.<UserUpdateResponse>builder()
-                        .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return 4")
-                        .status(HttpStatus.OK.value())
-                        .build();
-            } else if (!updateInformation.getNewPassword().equals(updateInformation.getConfirmNewPassword())) {          // Confirm new password not match
-                return BaseResponse.<UserUpdateResponse>builder()
-                        .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return 5")
-                        .status(HttpStatus.OK.value())
-                        .build();
-            }
+        BaseResponse<User> updatedPassword = updatePassword(updateInformation, existingUser);
+        if(updatedPassword.getStatus() != HttpStatus.OK.value()) {
+            return BaseResponse.<UserUpdateResponse>builder()
+                    .message(updatedPassword.getMessage())
+                    .status(updatedPassword.getStatus())
+                    .build();
         }
+        existingUser = updatedPassword.getData();
 
         // Update information
         InformationUpdateRequest informationUpdateRequest = updateInformation.getInformation();
-        InformationUpdateResponse informationUpdateResponse = null;
         if(informationUpdateRequest != null){
-            informationUpdateResponse = informationService.updateInformation(userId, informationUpdateRequest).getData();
-
-            // Set information into response
+            InformationUpdateResponse informationUpdateResponse = informationService.updateInformation(userId, informationUpdateRequest).getData();
             updatedUserResponse.setInformation(informationUpdateResponse);
         }
 
         // Update phone
         List<PhoneUpdateRequest> phonesUpdateRequest = updateInformation.getPhones();
-        BaseResponse<List<PhoneUpdateResponse>> phonesUpdateResponse = null;
         if(phonesUpdateRequest != null) {
+            BaseResponse<List<PhoneUpdateResponse>> phonesUpdateResponse;
             phonesUpdateResponse = phoneService.updatePhone(userId, phonesUpdateRequest);
-            if(phonesUpdateResponse.getData() != null){
-                // Set list phone into response
-                updatedUserResponse.setPhones(phonesUpdateResponse.getData());
-            } else {
+            if(phonesUpdateResponse.getData() == null){
                 return BaseResponse.<UserUpdateResponse>builder()
                         .message(phonesUpdateResponse.getMessage())
                         .status(phonesUpdateResponse.getStatus())
                         .build();
+
             }
+            updatedUserResponse.setPhones(phonesUpdateResponse.getData());
+        } else {
+            updatedUserResponse.setPhones(null);
         }
 
         // Save to database
         userRepository.save(existingUser);
 
         return BaseResponse.<UserUpdateResponse>builder()
-                .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return success ")
+                .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return success")
                 .data(updatedUserResponse)
                 .status(HttpStatus.OK.value())
                 .build();
@@ -314,5 +305,115 @@ public class UserServiceImpl implements UserService{
                     .message("class: UserServiceImpl + func: getById() + return 2")
                     .build();
         }
+    }
+
+    public BaseResponse<User> updateUsername(UserUpdateRequest updateInformation, User existingUser){
+        if(updateInformation.getUsername() == null) {
+            return BaseResponse.<User>builder()
+                    .status(HttpStatus.OK.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // New username already exist
+        if(userRepository.existsByUsername(updateInformation.getUsername())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updateUsername(UserUpdateRequest updateInformation, User existingUser) + return 1")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // New username same with the old one
+        if (updateInformation.getUsername().equals(existingUser.getUsername())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updateUsername(UserUpdateRequest updateInformation, User existingUser) + return 2")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+        existingUser.setUsername(updateInformation.getUsername());
+        return BaseResponse.<User>builder()
+                .message("class: UserServiceImpl + func: updateUsername(UserUpdateRequest updateInformation, User existingUser) + return success")
+                .status(HttpStatus.OK.value())
+                .data(existingUser)
+                .build();
+    }
+
+    public BaseResponse<User> updateEmail(UserUpdateRequest updateInformation, User existingUser){
+        if(updateInformation.getEmail() == null) {
+            return BaseResponse.<User>builder()
+                    .status(HttpStatus.OK.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // New email already exist
+        if(userRepository.existsByEmail(updateInformation.getEmail())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updateEmail(Long userId, UserDTO updatedInformation) + return 1")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // New email same with the old one
+        if (updateInformation.getEmail().equals(existingUser.getEmail())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updateEmail(Long userId, UserDTO updatedInformation) + return 2")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        existingUser.setEmail(updateInformation.getEmail());
+        return BaseResponse.<User>builder()
+                .message("class: UserServiceImpl + func: updateEmail(Long userId, UserDTO updatedInformation) + return success")
+                .status(HttpStatus.OK.value())
+                .data(existingUser)
+                .build();
+    }
+
+    public BaseResponse<User> updatePassword(UserUpdateRequest updateInformation, User existingUser){
+        if(updateInformation.getOldPassword() == null) {
+            return BaseResponse.<User>builder()
+                    .status(HttpStatus.OK.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // New password must not null
+        if(updateInformation.getNewPassword() == null) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updatePassword(Long userId, UserDTO updatedInformation) + return 1")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // Wrong password
+        if (!passwordEncoder.matches(updateInformation.getOldPassword(), existingUser.getPassword())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updatePassword(Long userId, UserDTO updatedInformation) + return 2")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        // Confirm new password not match
+        if (!updateInformation.getNewPassword().equals(updateInformation.getConfirmNewPassword())) {
+            return BaseResponse.<User>builder()
+                    .message("class: UserServiceImpl + func: updatePassword(Long userId, UserDTO updatedInformation) + return 3")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(existingUser)
+                    .build();
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(updateInformation.getNewPassword()));
+        return BaseResponse.<User>builder()
+                .message("class: UserServiceImpl + func: updatePassword(Long userId, UserDTO updatedInformation) + return success")
+                .status(HttpStatus.OK.value())
+                .data(existingUser)
+                .build();
     }
 }

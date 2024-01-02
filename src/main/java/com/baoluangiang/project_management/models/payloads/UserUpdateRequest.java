@@ -14,6 +14,8 @@ import java.util.List;
 public class UserUpdateRequest {
     private String username;
 
+    private String email;
+
     private String oldPassword;
 
     private String newPassword;
