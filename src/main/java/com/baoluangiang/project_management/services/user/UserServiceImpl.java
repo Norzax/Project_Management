@@ -139,6 +139,9 @@ public class UserServiceImpl implements UserService{
 
         existingUser = userOptional.get().get(0);
 
+        // Create response for updater
+        UserUpdateResponse updatedUserResponse = modelMapper.map(existingUser, UserUpdateResponse.class);
+
         // Update username
         if(updateInformation.getUsername() != null){
             if(!userRepository.existsByUsername(updateInformation.getUsername()) && !updateInformation.getUsername().equals(existingUser.getUsername())) {
@@ -154,6 +157,9 @@ public class UserServiceImpl implements UserService{
                         .status(HttpStatus.OK.value())
                         .build();
             }
+
+            // Set username into response
+            updatedUserResponse.setUsername(updateInformation.getUsername());
         }
 
         // Update password
@@ -180,22 +186,29 @@ public class UserServiceImpl implements UserService{
         InformationUpdateResponse informationUpdateResponse = null;
         if(informationUpdateRequest != null){
             informationUpdateResponse = informationService.updateInformation(userId, informationUpdateRequest).getData();
+
+            // Set information into response
+            updatedUserResponse.setInformation(informationUpdateResponse);
         }
 
         // Update phone
         List<PhoneUpdateRequest> phonesUpdateRequest = updateInformation.getPhones();
-        List<PhoneUpdateResponse> phonesUpdateResponse = null;
+        BaseResponse<List<PhoneUpdateResponse>> phonesUpdateResponse = null;
         if(phonesUpdateRequest != null) {
-            phonesUpdateResponse = phoneService.updatePhone(userId, phonesUpdateRequest).getData();
+            phonesUpdateResponse = phoneService.updatePhone(userId, phonesUpdateRequest);
+            if(phonesUpdateResponse.getData() != null){
+                // Set list phone into response
+                updatedUserResponse.setPhones(phonesUpdateResponse.getData());
+            } else {
+                return BaseResponse.<UserUpdateResponse>builder()
+                        .message(phonesUpdateResponse.getMessage())
+                        .status(phonesUpdateResponse.getStatus())
+                        .build();
+            }
         }
 
         // Save to database
         userRepository.save(existingUser);
-
-        // Create response for updater
-        UserUpdateResponse updatedUserResponse = modelMapper.map(existingUser, UserUpdateResponse.class);
-        updatedUserResponse.setInformation(informationUpdateResponse);
-        updatedUserResponse.setPhones(phonesUpdateResponse);
 
         return BaseResponse.<UserUpdateResponse>builder()
                 .message("class: UserServiceImpl + func: updateUser(Long userId, UserDTO updatedInformation) + return success ")
