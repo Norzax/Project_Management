@@ -10,5 +10,5 @@ import java.util.List;
 public interface PhoneService {
     BaseResponse<List<PhoneDTO>> getAll();
     BaseResponse<List<PhoneDTO>> getById(Long userId);
-    BaseResponse<List<PhoneUpdateResponse>> updatePhone(Long userId, List<PhoneUpdateRequest> updatedPhone);
+    BaseResponse<List<PhoneUpdateResponse>> updatePhone(Long userId, List<PhoneUpdateRequest> updatePhone);
 }

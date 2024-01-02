@@ -49,33 +49,35 @@ public class InformationServiceImpl implements InformationService{
                     .build();
         }
 
-        // Update display name
-        if(!updateInformation.getDisplayName().equals(existingInformation.getDisplayName()) &&
-                updateInformation.getDisplayName() != null) {
-            existingInformation.setDisplayName(updateInformation.getDisplayName());
-        }
+        if(updateInformation != null) {
+            // Update display name
+            if (!updateInformation.getDisplayName().equals(existingInformation.getDisplayName()) &&
+                    updateInformation.getDisplayName() != null) {
+                existingInformation.setDisplayName(updateInformation.getDisplayName());
+            }
 
-        // Update bio
-        if(!updateInformation.getBio().equals(existingInformation.getBio()) &&
-                updateInformation.getBio() != null) {
-            existingInformation.setBio(updateInformation.getBio());
-        }
+            // Update bio
+            if (!updateInformation.getBio().equals(existingInformation.getBio()) &&
+                    updateInformation.getBio() != null) {
+                existingInformation.setBio(updateInformation.getBio());
+            }
 
-        // Update birthday
-        if(!updateInformation.getBirthday().equals(existingInformation.getBirthday()) &&
-                updateInformation.getBirthday() != null) {
-            existingInformation.setBirthday(updateInformation.getBirthday());
-        }
+            // Update birthday
+            if (!updateInformation.getBirthday().equals(existingInformation.getBirthday()) &&
+                    updateInformation.getBirthday() != null) {
+                existingInformation.setBirthday(updateInformation.getBirthday());
+            }
 
-        // Update avatar url
-        if(!updateInformation.getAvatarUrl().equals(existingInformation.getAvatarUrl()) &&
-                updateInformation.getAvatarUrl() != null) {
-            existingInformation.setAvatarUrl(updateInformation.getAvatarUrl());
+            // Update avatar url
+            if (!updateInformation.getAvatarUrl().equals(existingInformation.getAvatarUrl()) &&
+                    updateInformation.getAvatarUrl() != null) {
+                existingInformation.setAvatarUrl(updateInformation.getAvatarUrl());
+            }
         }
 
         InformationUpdateResponse updatedInformation = modelMapper.map(informationRepository.save(existingInformation), InformationUpdateResponse.class);
         return BaseResponse.<InformationUpdateResponse>builder()
-                .message("class: UserServiceImpl + func: updateUserInformation(Long userId, InformationDTO updatedInformation) + return 2")
+                .message("class: UserServiceImpl + func: updateInformation(Long userId, InformationDTO updatedInformation) + return success")
                 .data(updatedInformation)
                 .status(HttpStatus.OK.value())
                 .build();
