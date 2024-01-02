@@ -37,10 +37,10 @@ Project Management là một ứng dụng đơn giản được xây dựng trê
 
 - **master**: Nhánh chính, luôn ổn định và chứa phiên bản đã được phát hành.
 - **develop**: Nhánh phát triển, được sử dụng cho việc phát triển mới, các tính năng chưa hoàn thiện.
-- **(a)/feature/<thứ-tự-tính-năng>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể.
-- **(b)/update/<thứ-tự-tính-năng>.<phiên-bản>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đang được phát triển.
-- **(c)/fix/<thứ-tự-tính-năng>.<phiên-bản-sửa-lỗi>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đã được sửa lỗi.
-- **(d)/hotfix/<tên-hotfix>**: Nhánh sửa lỗi nhanh chóng để fix các vấn đề cấp bách từ production.
+- **a/feature/<thứ-tự-tính-năng>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể.
+- **b/update/<thứ-tự-tính-năng>.<phiên-bản>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đang được phát triển.
+- **c/fix/<thứ-tự-tính-năng>.<phiên-bản-sửa-lỗi>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đã được sửa lỗi.
+- **d/hotfix/<tên-hotfix>**: Nhánh sửa lỗi nhanh chóng để fix các vấn đề cấp bách từ production.
 
 
 ## Cấu Trúc Thư Mục
