@@ -1,3 +1,15 @@
 
+R
+java:S1874#"0Remove this use of "signWith"; it is deprecated.(İÍ÷§ùÿÿÿÿ8ûÖ¦Í1
+R
+java:S18743"0Remove this use of "signWith"; it is deprecated.(İÍ÷§ùÿÿÿÿ8ıÖ¦Í1
+P
+java:S1874:".Remove this use of "parser"; it is deprecated.(íˆÿºøÿÿÿÿ8şÖ¦Í1
+W
+java:S1874:"5Remove this use of "setSigningKey"; it is deprecated.(íˆÿºøÿÿÿÿ8şÖ¦Í1
 A
 java:S1168="$Return an empty map instead of null.(¥¹ï8ñ½ŸƒÌ1
+P
+java:S1874C".Remove this use of "parser"; it is deprecated.(¢ßÕıÿÿÿÿ8€×¦Í1
+W
+java:S1874C"5Remove this use of "setSigningKey"; it is deprecated.(¢ßÕıÿÿÿÿ8€×¦Í1

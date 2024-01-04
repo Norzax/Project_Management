@@ -173,3 +173,7 @@ Zsrc/main/java/com/baoluangiang/project_management/models/payloads/UserRegisterR
 ^src/main/java/com/baoluangiang/project_management/controllers/admin/ProjectRoleController.java,1\6\16b2bc73ab328c2c572669fdb8d1fe5ea29bc0c5
 ”
 dsrc/main/java/com/baoluangiang/project_management/controllers/authentication/UserAuthController.java,c\b\cb45fa0d63a9f8f3217add78de3db07ae57de54b
+‡
+Wsrc/main/java/com/baoluangiang/project_management/models/payloads/UserLoginRequest.java,3\0\30d8aef24c947272fd4ae6e181c2a8fed7c7aa53
+ˆ
+Xsrc/main/java/com/baoluangiang/project_management/models/payloads/UserLoginResponse.java,f\b\fba6c3df481d3063c8dedf884b5327efc8382271

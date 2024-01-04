@@ -1,10 +1,3 @@
 
 H
-java:S1168"+Return an empty collection instead of null.(¥Ήο8τέ¥Ν1
-X	java:S125"<This block of commented-out lines of code should be removed.(‘άγ«8 Ήά¥Ν1
-D
-java:S1125:"'Remove the unnecessary boolean literal.(€ωΆΜ8ΔΨÒ¥Ν1
-D
-java:S1125:"'Remove the unnecessary boolean literal.(€ωΆΜ8ΔΨÒ¥Ν1
-D
-java:S1125:"'Remove the unnecessary boolean literal.(€ωΆΜ8ΕΨÒ¥Ν1
+java:S1948"&Make "user" transient or serializable.(’ΨΎύÿÿÿÿ8‚¦Ν1
