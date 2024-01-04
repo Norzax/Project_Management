@@ -64,4 +64,11 @@ public class UserController {
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }
+
+    @PutMapping("/inactive/{id}")
+    public ResponseEntity<BaseResponse<Void>> inactive(@PathVariable("id") Long userId) {
+        BaseResponse<Void> response = userService.inactiveUser(userId);
+        HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
+        return ResponseEntity.status(httpStatus).body(response);
+    }
 }

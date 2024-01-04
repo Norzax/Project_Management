@@ -21,6 +21,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationProvider authenticationProvider;
+    private final RequestFilter requestFilter;
+    @Lazy
+    public SecurityConfig(UserDetailsService userDetailsService, AuthenticationProvider authenticationProvider, RequestFilter requestFilter) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationProvider = authenticationProvider;
+        this.requestFilter = requestFilter;
+    }
+
     private static final String[] WHITE_LIST = {
             "/api/v1/auth/**",
             "/v3/api-docs/**",
@@ -32,14 +42,19 @@ public class SecurityConfig {
             "/api/v1/**"
     };
 
-    private final UserDetailsService userDetailsService;
-    private final AuthenticationProvider authenticationProvider;
-    private final RequestFilter requestFilter;
-    @Lazy
-    public SecurityConfig(UserDetailsService userDetailsService, AuthenticationProvider authenticationProvider, RequestFilter requestFilter) {
-        this.userDetailsService = userDetailsService;
-        this.authenticationProvider = authenticationProvider;
-        this.requestFilter = requestFilter;
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority(RoleEnum.ADMIN.name())
+                        .requestMatchers("/api/v1/user/**").hasAnyAuthority(RoleEnum.USER.name(), RoleEnum.ADMIN.name())
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
@@ -58,20 +73,5 @@ public class SecurityConfig {
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
-    }
-
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(authz -> authz
-                        .requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasAuthority(RoleEnum.ADMIN.name())
-                        .requestMatchers("/api/v1/user/**").hasAnyAuthority(RoleEnum.USER.name(), RoleEnum.ADMIN.name())
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
     }
 }

@@ -1,12 +1,17 @@
 package com.baoluangiang.project_management.services.user;
 
 import com.baoluangiang.project_management.configurations.security.UserDetailsImpl;
+import com.baoluangiang.project_management.entities.Information;
+import com.baoluangiang.project_management.entities.Role;
 import com.baoluangiang.project_management.entities.User;
 import com.baoluangiang.project_management.models.dtos.*;
 import com.baoluangiang.project_management.models.payloads.*;
+import com.baoluangiang.project_management.repositories.InformationRepository;
+import com.baoluangiang.project_management.repositories.RoleRepository;
 import com.baoluangiang.project_management.repositories.UserRepository;
 import com.baoluangiang.project_management.services.information.InformationService;
 import com.baoluangiang.project_management.services.phone.PhoneService;
+import com.baoluangiang.project_management.utilities.RoleEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,21 +20,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final InformationRepository informationRepository;
     private final InformationService informationService;
     private final PhoneService phoneService;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, InformationService informationService, PhoneService phoneService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, InformationRepository informationRepository, InformationService informationService, PhoneService phoneService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.informationRepository = informationRepository;
         this.informationService = informationService;
         this.phoneService = phoneService;
         this.modelMapper = modelMapper;
@@ -212,11 +223,9 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<Void> inactiveUser(Long userId) {
         Optional<List<User>> userOptional = userRepository.findUserById(userId);
         if (userOptional.isPresent()) {
-            List<UserDTO> inactiveUser = findUserByInformation(userOptional.get()).getData();
-            if (inactiveUser.get(0).isActive()) {
-                User setInactiveUser = modelMapper.map(inactiveUser, User.class);
-                setInactiveUser.setActive(false);
-                userRepository.save(setInactiveUser);
+            if (userOptional.get().get(0).isActive()) {
+                userOptional.get().get(0).setActive(false);
+                userRepository.save(userOptional.get().get(0));
                 return BaseResponse.<Void>builder()
                         .message("class: UserServiceImpl + func: inactiveUser(Long userId) + return 1")
                         .data(null)
@@ -238,11 +247,9 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<Void> activeUser(String username) {
         Optional<List<User>> userOptional = userRepository.findUserByUsername(username);
         if (userOptional.isPresent()) {
-            List<UserDTO> inactiveUser = findUserByInformation(userOptional.get()).getData();
-            if (!inactiveUser.get(0).isActive()) {
-                User setActiveUser = modelMapper.map(inactiveUser, User.class);
-                setActiveUser.setActive(true);
-                userRepository.save(setActiveUser);
+            if (!userOptional.get().get(0).isActive()) {
+                userOptional.get().get(0).setActive(true);
+                userRepository.save(userOptional.get().get(0));
                 return BaseResponse.<Void>builder()
                         .message("class: UserServiceImpl + func: activeUser(String username) + return 1")
                         .data(null)
@@ -261,8 +268,36 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public BaseResponse<UserDTO> registerUser(UserDTO registerInformation) {
-        return null;
+    public BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation) {
+        boolean isExistEmail =  userRepository.existsByEmail(registerInformation.getEmail());
+        if (isExistEmail){
+            return BaseResponse.<UserRegisterResponse>builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("class: UserServiceImpl + func: registerUser(UserRegisterRequest registerInformation) + return 1")
+                    .build();
+        }
+
+        User regisNewUser = new User();
+        regisNewUser.setEmail(registerInformation.getEmail());
+        regisNewUser.setUsername(registerInformation.getEmail());
+        regisNewUser.setPassword(passwordEncoder.encode(registerInformation.getPassword()));
+        regisNewUser.setActive(true);
+
+        Role role = roleRepository.findByRoleName(RoleEnum.USER.name());
+        regisNewUser.setRole(role);
+
+        User registedUser = userRepository.save(regisNewUser);
+
+        Information regisNewInformation = new Information();
+        regisNewInformation.setUser(registedUser);
+
+        informationRepository.save(regisNewInformation);
+
+        return BaseResponse.<UserRegisterResponse>builder()
+                .status(HttpStatus.OK.value())
+                .data(modelMapper.map(registedUser, UserRegisterResponse.class))
+                .message("class: UserServiceImpl + func: registerUser(UserRegisterRequest registerInformation) + return success")
+                .build();
     }
 
     public BaseResponse<List<UserDTO>> findUserByInformation(List<User> userList){
