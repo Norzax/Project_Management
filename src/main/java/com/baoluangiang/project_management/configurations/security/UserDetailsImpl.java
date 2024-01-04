@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Data
 @Builder
@@ -21,11 +21,7 @@ public class UserDetailsImpl implements UserDetails {
     private User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-//        return user.getRoles()
-//                .stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
-//                .collect(Collectors.toList());
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getRoleName()));
     }
 
     @Override
@@ -55,6 +51,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return (user.isActive() == true || user.isActive() == false) ? user.isActive() : true;
+        return user.isActive();
     }
 }

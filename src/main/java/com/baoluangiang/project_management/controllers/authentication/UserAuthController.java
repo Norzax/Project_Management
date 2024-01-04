@@ -1,9 +1,7 @@
 package com.baoluangiang.project_management.controllers.authentication;
 
 import com.baoluangiang.project_management.controllers.utils.ResponseStatus;
-import com.baoluangiang.project_management.models.payloads.BaseResponse;
-import com.baoluangiang.project_management.models.payloads.UserRegisterRequest;
-import com.baoluangiang.project_management.models.payloads.UserRegisterResponse;
+import com.baoluangiang.project_management.models.payloads.*;
 import com.baoluangiang.project_management.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +19,16 @@ public class UserAuthController {
         this.userService = userService;
     }
 
-    @PutMapping("/register")
+    @PutMapping("/signup")
     public ResponseEntity<BaseResponse<UserRegisterResponse>> signup(@RequestBody UserRegisterRequest userRegisterRequest) {
         BaseResponse<UserRegisterResponse> response = userService.registerUser(userRegisterRequest);
+        HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<BaseResponse<UserLoginResponse>> signin(@RequestBody UserLoginRequest userLoginRequest) {
+        BaseResponse<UserLoginResponse> response = userService.login(userLoginRequest);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }
