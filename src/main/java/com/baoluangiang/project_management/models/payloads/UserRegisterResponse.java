@@ -10,11 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRegisterResponse {
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String email;
-
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String password;
 }

@@ -2,9 +2,7 @@ package com.baoluangiang.project_management.services.user;
 
 import com.baoluangiang.project_management.entities.User;
 import com.baoluangiang.project_management.models.dtos.UserDTO;
-import com.baoluangiang.project_management.models.payloads.BaseResponse;
-import com.baoluangiang.project_management.models.payloads.UserUpdateRequest;
-import com.baoluangiang.project_management.models.payloads.UserUpdateResponse;
+import com.baoluangiang.project_management.models.payloads.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,5 +17,5 @@ public interface UserService {
     BaseResponse<UserUpdateResponse> updateUser(Long userId, UserUpdateRequest updatedInformation);
     BaseResponse<Void> inactiveUser(Long userId);
     BaseResponse<Void> activeUser(String username);
-    BaseResponse<UserDTO> registerUser(UserDTO registerInformation);
+    BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation);
 }

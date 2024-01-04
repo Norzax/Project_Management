@@ -1,11 +1,10 @@
 
 H
-java:S1948"&Make "user" transient or serializable.(’Ø¾ıÿÿÿÿ8ÖæÚƒÌ1
-o
-java:S6204"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8ØæÚƒÌ1
+java:S1168"+Return an empty collection instead of null.(¥¹ï8ôİ¥Í1
+X	java:S125"<This block of commented-out lines of code should be removed.(‘Üã«8 ¹Ü¥Í1
 D
-java:S11259"'Remove the unnecessary boolean literal.(€ù¢Ì8¾ÚƒÌ1
+java:S1125:"'Remove the unnecessary boolean literal.(€ù¢Ì8ÄØÒ¥Í1
 D
-java:S11259"'Remove the unnecessary boolean literal.(€ù¢Ì8Šš±ƒÌ1
+java:S1125:"'Remove the unnecessary boolean literal.(€ù¢Ì8ÄØÒ¥Í1
 D
-java:S11259"'Remove the unnecessary boolean literal.(€ù¢Ì8¾ÚƒÌ1
+java:S1125:"'Remove the unnecessary boolean literal.(€ù¢Ì8ÅØÒ¥Í1
