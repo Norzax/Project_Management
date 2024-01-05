@@ -1,6 +1,5 @@
 package com.baoluangiang.project_management.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +44,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Attachment> attachments;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Project> projects;
 
     @OneToMany(mappedBy = "user")
     private Set<UserProjectPermission> userProjectPermissions = new HashSet<>();

@@ -8,6 +8,7 @@ import com.baoluangiang.project_management.models.payloads.PhoneUpdateRequest;
 import com.baoluangiang.project_management.models.payloads.PhoneUpdateResponse;
 import com.baoluangiang.project_management.repositories.PhoneRepository;
 import com.baoluangiang.project_management.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,17 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PhoneServiceImpl implements PhoneService{
     private final PhoneRepository phoneRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public PhoneServiceImpl(PhoneRepository phoneRepository, UserRepository userRepository, ModelMapper modelMapper) {
-        this.phoneRepository = phoneRepository;
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public BaseResponse<List<PhoneDTO>> getAll() {
@@ -80,19 +75,22 @@ public class PhoneServiceImpl implements PhoneService{
 
                 Optional<User> updater = userRepository.findById(userId);
                 updater.ifPresent(user -> {
-                    Phone newPhone = new Phone();
-                    newPhone.setPhoneNumber(phoneUpdateRequest.getNewPhoneNumber());
-                    newPhone.setUser(user);
+                    Phone newPhone = Phone.builder()
+                            .phoneNumber(phoneUpdateRequest.getNewPhoneNumber())
+                            .user(user)
+                            .build();
+
                     oldPhone.get().setPhoneNumber(newPhone.getPhoneNumber());
                     phoneRepository.save(oldPhone.get());
                 });
             }
         }
+
         optionalPhones = phoneRepository.findPhoneByUserId(userId);
         List<PhoneUpdateResponse> updatedPhone = optionalPhones.get().stream()
-                .map(phoneEntity -> modelMapper.map(phoneEntity, PhoneUpdateResponse.class)).toList();
+            .map(phoneEntity -> modelMapper.map(phoneEntity, PhoneUpdateResponse.class)).toList();
 
-        return BaseResponse.<List<PhoneUpdateResponse>>builder()
+            return BaseResponse.<List<PhoneUpdateResponse>>builder()
                 .message("class: PhoneServiceImpl + func: updatePhone(Long userId, List<PhoneUpdateRequest> updatedPhones) + return success")
                 .data(updatedPhone)
                 .status(HttpStatus.OK.value())

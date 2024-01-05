@@ -42,7 +42,7 @@ public class Project {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
     @ManyToOne

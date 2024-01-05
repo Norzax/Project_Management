@@ -7,6 +7,7 @@ import com.baoluangiang.project_management.models.payloads.BaseResponse;
 import com.baoluangiang.project_management.models.payloads.InformationUpdateRequest;
 import com.baoluangiang.project_management.models.payloads.InformationUpdateResponse;
 import com.baoluangiang.project_management.repositories.InformationRepository;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,15 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class InformationServiceImpl implements InformationService{
     private final InformationRepository informationRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public InformationServiceImpl(InformationRepository informationRepository, ModelMapper modelMapper) {
-        this.informationRepository = informationRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public BaseResponse<List<InformationDTO>> getAll() {
