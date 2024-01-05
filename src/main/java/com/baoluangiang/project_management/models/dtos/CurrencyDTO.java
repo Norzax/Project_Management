@@ -1,6 +1,5 @@
 package com.baoluangiang.project_management.models.dtos;
 
-import com.baoluangiang.project_management.entities.Project;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +22,5 @@ public class CurrencyDTO {
     private String name;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<Project> projects;
+    private List<ProjectDTO> projects;
 }
