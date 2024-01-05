@@ -17,6 +17,6 @@ public interface UserService {
     BaseResponse<UserUpdateResponse> updateUser(Long userId, UserUpdateRequest updatedInformation);
     BaseResponse<Void> inactiveUser(Long userId);
     BaseResponse<Void> activeUser(String username);
-    BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation);
+    BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation, String role);
     BaseResponse<UserLoginResponse> login(UserLoginRequest userLoginRequest);
 }

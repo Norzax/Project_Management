@@ -14,8 +14,11 @@ import java.util.Map;
 @Slf4j
 public class TokenUtil {
 
-    @Value("${jwt.duration}")
-    public Integer duration;
+    @Value("${jwt.accessDuration}")
+    public Integer accessDuration;
+
+    @Value("${jwt.refreshDuration}")
+    public Integer refreshDuration;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -24,7 +27,7 @@ public class TokenUtil {
     public AccessTokenGenerated generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
-        Date expiredIn = new Date(System.currentTimeMillis() + duration * 1000);
+        Date expiredIn = new Date(System.currentTimeMillis() + accessDuration * 1000);
 
         return AccessTokenGenerated.builder()
                 .accessToken(Jwts.builder()
@@ -40,7 +43,7 @@ public class TokenUtil {
     public RefreshTokenGenerated generateRefreshToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
 
-        Date expiredIn = new Date(System.currentTimeMillis() + duration * 1000);
+        Date expiredIn = new Date(System.currentTimeMillis() + refreshDuration * 1000);
 
         return RefreshTokenGenerated.builder()
                 .refreshToken(Jwts.builder()

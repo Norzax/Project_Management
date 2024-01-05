@@ -1,6 +1,7 @@
 package com.baoluangiang.project_management.services.user;
 
 import com.baoluangiang.project_management.configurations.security.AccessTokenGenerated;
+import com.baoluangiang.project_management.configurations.security.RefreshTokenGenerated;
 import com.baoluangiang.project_management.configurations.security.TokenUtil;
 import com.baoluangiang.project_management.configurations.security.UserDetailsImpl;
 import com.baoluangiang.project_management.entities.Information;
@@ -13,14 +14,12 @@ import com.baoluangiang.project_management.repositories.RoleRepository;
 import com.baoluangiang.project_management.repositories.UserRepository;
 import com.baoluangiang.project_management.services.information.InformationService;
 import com.baoluangiang.project_management.services.phone.PhoneService;
-import com.baoluangiang.project_management.utilities.RoleEnum;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,10 +27,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -42,19 +41,6 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenUtil tokenUtil;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, InformationRepository informationRepository, InformationService informationService, PhoneService phoneService, ModelMapper modelMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenUtil tokenUtil) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.informationRepository = informationRepository;
-        this.informationService = informationService;
-        this.phoneService = phoneService;
-        this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.tokenUtil = tokenUtil;
-    }
 
     @Override
     public BaseResponse<Long> getLoggedInUserId() {
@@ -113,7 +99,7 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<List<UserDTO>> getAll() {
         Optional<List<User>> userListOptional = userRepository.findAllUser();
         if (userListOptional.isPresent()) {
-            return findUserByInformation(userListOptional.get());
+            return findUserByAnyInfo(userListOptional.get());
         } else {
             return BaseResponse.<List<UserDTO>>builder()
                     .status(HttpStatus.NOT_FOUND.value())
@@ -125,7 +111,7 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<List<UserDTO>> getById(Long userId) {
         Optional<List<User>> userOptional = userRepository.findUserById(userId);
         if (userOptional.isPresent()) {
-            return findUserByInformation(userOptional.get());
+            return findUserByAnyInfo(userOptional.get());
         } else {
             return BaseResponse.<List<UserDTO>>builder()
                     .status(HttpStatus.NOT_FOUND.value())
@@ -137,7 +123,7 @@ public class UserServiceImpl implements UserService{
     public BaseResponse<List<UserDTO>> getByUsername(String username) {
         Optional<List<User>> userOptional = userRepository.findUserByUsername(username);
         if (userOptional.isPresent()) {
-            return findUserByInformation(userOptional.get());
+            return findUserByAnyInfo(userOptional.get());
         } else {
             return BaseResponse.<List<UserDTO>>builder()
                     .status(HttpStatus.NOT_FOUND.value())
@@ -277,7 +263,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation) {
+    public BaseResponse<UserRegisterResponse> registerUser(UserRegisterRequest registerInformation, String role) {
         boolean isExistEmail =  userRepository.existsByEmail(registerInformation.getEmail());
         if (isExistEmail){
             return BaseResponse.<UserRegisterResponse>builder()
@@ -286,14 +272,18 @@ public class UserServiceImpl implements UserService{
                     .build();
         }
 
-        User regisNewUser = new User();
-        regisNewUser.setEmail(registerInformation.getEmail());
-        regisNewUser.setUsername(registerInformation.getEmail());
-        regisNewUser.setPassword(passwordEncoder.encode(registerInformation.getPassword()));
-        regisNewUser.setActive(true);
 
-        Role role = roleRepository.findByRoleName(RoleEnum.USER.name());
-        regisNewUser.setRole(role);
+
+        Role roleUser = roleRepository.findByRoleName(role);
+
+        User regisNewUser  = User.builder()
+                .email(registerInformation.getEmail())
+                .username(registerInformation.getEmail())
+                .password(passwordEncoder.encode(registerInformation.getPassword()))
+                .isActive(true)
+                .role(roleUser)
+                .build();
+
 
         User registedUser = userRepository.save(regisNewUser);
 
@@ -311,45 +301,34 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public BaseResponse<UserLoginResponse> login(UserLoginRequest userLoginRequest) {
-        try {
-            var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
 
-            if (authentication.isAuthenticated()) {
-                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (authentication.isAuthenticated()) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-                if (!userDetails.isEnabled()) {
-                    return BaseResponse.<UserLoginResponse>builder()
-                            .status(HttpStatus.BAD_REQUEST.value())
-                            .message("inactive")
-                            .build();
-                }
+            AccessTokenGenerated accessTokenGenerated = tokenUtil.generateToken(userDetails);
+            RefreshTokenGenerated refreshTokenGenerated = tokenUtil.generateRefreshToken(userDetails);
 
-                AccessTokenGenerated accessTokenGenerated = tokenUtil.generateToken(userDetails);
-                return BaseResponse.<UserLoginResponse>builder()
-                        .status(HttpStatus.OK.value())
-                        .message("Login success")
-                        .data(
-                                UserLoginResponse.builder()
-                                        .accessToken(accessTokenGenerated.getAccessToken())
-                                        .expiredIn(accessTokenGenerated.getExpiredIn())
-                                        .roles(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
-                                        .build()
-                        ).build();
-            } else {
-                return BaseResponse.<UserLoginResponse>builder()
-                        .status(HttpStatus.NOT_FOUND.value())
-                        .message("Not exist")
-                        .build();
-            }
-        } catch (AuthenticationException e) {
             return BaseResponse.<UserLoginResponse>builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .message("catch")
+                    .status(HttpStatus.OK.value())
+                    .message("Login success")
+                    .data(
+                            UserLoginResponse.builder()
+                                    .refreshToken(refreshTokenGenerated.getRefreshToken())
+                                    .accessToken(accessTokenGenerated.getAccessToken())
+                                    .expiredIn(accessTokenGenerated.getExpiredIn())
+                                    .roles(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                                    .build()
+                    ).build();
+        } else {
+            return BaseResponse.<UserLoginResponse>builder()
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .message("Not exist")
                     .build();
         }
     }
 
-    public BaseResponse<List<UserDTO>> findUserByInformation(List<User> userList){
+    public BaseResponse<List<UserDTO>> findUserByAnyInfo(List<User> userList){
         try {
             List<UserDTO> userDTOList = userList.stream()
                     .map(userEntity -> {
