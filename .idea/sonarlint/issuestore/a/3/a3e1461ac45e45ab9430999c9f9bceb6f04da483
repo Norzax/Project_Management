@@ -1,0 +1,7 @@
+
+X
+java:S1128";Remove this unused import 'jakarta.persistence.JoinColumn'.(İçÆ•8ªÅë¾Í1
+\
+java:S1128":Remove this unused import 'jakarta.persistence.ManyToOne'.(áîÖãùÿÿÿÿ8ªÅë¾Í1
+\
+java:S1128":Remove this unused import 'jakarta.persistence.OneToMany'.( ëîéúÿÿÿÿ8Û¢î¾Í1

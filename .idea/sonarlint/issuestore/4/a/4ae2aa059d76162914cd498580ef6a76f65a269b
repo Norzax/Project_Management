@@ -1,3 +1,5 @@
 
-}
-java:S3655O"`Call "optionalCurrency.isPresent()" or "!optionalCurrency.isEmpty()" before accessing the value.(ˆ©å 8ôÄ¯½Í1
+Y
+java:S4973b"<Strings and Boxed types should be compared using "equals()".(±¥•Ì8ö¿¹¾Í1
+Y
+java:S4973d"<Strings and Boxed types should be compared using "equals()".(öÓÿº8÷¿¹¾Í1
