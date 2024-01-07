@@ -37,9 +37,9 @@ Project Management is a simple application built on the Java and Spring Boot pla
 
 - **master**: Main branch, always stable, containing released versions.
 - **develop**: Development branch, used for new development, incomplete features.
-- **a/feature(setup)/<ordinal-feature(setup)>/<developer>/\<feature(setup)-name>**: Branch for each feature, specific setup.
-- **b/update/<ordinal-feature(setup)>.<version>/<developer>/\<feature(setup)-name>**: Branch for each feature, specific setup being developed.
-- **c/fix/<ordinal-feature(setup)>.<fixed-version>/<developer>/\<feature(setup)-name>**: Branch for each feature, specific setup with fixed issues.
+- **a/feature(setup)/<ordinal-feature(setup)>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup.
+- **b/update/<ordinal-feature(setup)>.<version>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup being developed.
+- **c/fix/<ordinal-feature(setup)>.<fixed-version>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup with fixed issues.
 - **#/hotfix/<hotfix-name>**: Branch for quickly fixing urgent production issues.
 
 ## Directory Structure
