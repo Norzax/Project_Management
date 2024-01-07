@@ -1,58 +1,56 @@
 # Project Management
 
-Ứng dụng Java Backend để quản lý dự án.
+A Java Backend application for project management.
 
-## Mô Tả
+## Description
 
-Project Management là một ứng dụng đơn giản được xây dựng trên nền tảng Java và Spring Boot. Ứng dụng cung cấp các tính năng cơ bản để quản lý các dự án cá nhân hoặc tổ chức.
+Project Management is a simple application built on the Java and Spring Boot platform. The application provides basic features to manage individual or organizational projects.
 
-## Sơ đồ ERD
-[Thiết kế dự án](https://drive.google.com/file/d/1QIW9Akdt6hKP1Oe9twGT9sVH1lyzSkzY/view?usp=sharing)
+## ERD Diagram
+[Project Design](https://drive.google.com/file/d/1QIW9Akdt6hKP1Oe9twGT9sVH1lyzSkzY/view?usp=sharing)
 
-## Hướng Dẫn Cài Đặt
+## Installation Guide
 
-### Yêu Cầu
+### Requirements
 
 - Java 17
 - Maven
 - MySQL
 
-### Cài Đặt và Chạy
+### Installation and Running
 
-1. Clone repository:
+1. Clone the repository:
 
     ```bash
     git clone https://github.com/Norzax/Project_Management.git
     ```
 
-2. Cấu hình cơ sở dữ liệu trong `application.properties`.
+2. Configure the database in `application.properties`.
 
-3. Chạy ứng dụng:
+3. Run the application:
 
     ```bash
     mvn spring-boot:run
     ```
 
-## Các Nhánh Quan Trọng
+## Important Branches
 
-- **master**: Nhánh chính, luôn ổn định và chứa phiên bản đã được phát hành.
-- **develop**: Nhánh phát triển, được sử dụng cho việc phát triển mới, các tính năng chưa hoàn thiện.
-- **a/feature/<thứ-tự-tính-năng>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể.
-- **b/update/<thứ-tự-tính-năng>.<phiên-bản>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đang được phát triển.
-- **c/fix/<thứ-tự-tính-năng>.<phiên-bản-sửa-lỗi>/<người-phát-triển>/<tên-tính-năng>**: Nhánh cho từng tính năng cụ thể đã được sửa lỗi.
-- **#/hotfix/<tên-hotfix>**: Nhánh sửa lỗi nhanh chóng để fix các vấn đề cấp bách từ production.
+- **master**: Main branch, always stable, containing released versions.
+- **develop**: Development branch, used for new development, incomplete features.
+- **a/feature(setup)/<ordinal-feature(setup)>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup.
+- **b/update/<ordinal-feature(setup)>.<version>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup being developed.
+- **c/fix/<ordinal-feature(setup)>.<fixed-version>/<developer>/<feature(setup)-name>**: Branch for each feature, specific setup with fixed issues.
+- **#/hotfix/<hotfix-name>**: Branch for quickly fixing urgent production issues.
 
+## Directory Structure
 
-## Cấu Trúc Thư Mục
+- `/src`: Java source code.
+- `/src/main/resources`: Application configuration and resources.
+- `/pom.xml`: Maven configuration file.
 
-- `/src`: Mã nguồn Java.
-- `/src/main/resources`: Cấu hình ứng dụng và tài nguyên.
-- `/pom.xml`: Tệp cấu hình Maven.
+## Contribution
 
-## Đóng Góp
-
-Chúng tôi rất hoan nghênh sự đóng góp từ cộng đồng. Nếu bạn muốn đóng góp vào dự án, vui lòng 
-[liên hệ qua email](mailto:giangbaoluan5@.com)
+We warmly welcome contributions from the community. If you'd like to contribute to the project, please [contact via email](mailto:giangbaoluan5@.com)
 
 ---
 © 2023 GiangBaoLuan Project-Management.
