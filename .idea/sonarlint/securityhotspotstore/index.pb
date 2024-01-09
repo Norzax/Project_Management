@@ -215,3 +215,13 @@ Zsrc/main/java/com/baoluangiang/project_management/models/payloads/StatusUpdateR
 asrc/main/java/com/baoluangiang/project_management/controllers/admin/InformationMngController.java,6\0\6060b9733293e6b4833e1b01c1f089aad16fac5c
 Ž
 ^src/main/java/com/baoluangiang/project_management/controllers/admin/CurrencyMngController.java,d\f\dfd4728af297b5cd94787d3dda010c34511c4c12
+Š
+Zsrc/main/java/com/baoluangiang/project_management/controllers/admin/TaskMngController.java,0\8\08b085cad2594803c35949fa55cd4807e2b90e87
+‘
+asrc/main/java/com/baoluangiang/project_management/controllers/admin/TransactionMngController.java,3\a\3a41edc57873770acada71d02ee591d7096df7fe
+z
+Jsrc/main/java/com/baoluangiang/project_management/models/dtos/TaskDTO.java,7\5\75903cbd08c61c06fb9589563e841a0a36f02fd6
+…
+Usrc/main/java/com/baoluangiang/project_management/models/payloads/StatusResponse.java,d\6\d69233a12a4f10116ee9a4e8a190895d10933d1c
+„
+Tsrc/main/java/com/baoluangiang/project_management/models/payloads/StatusRequest.java,4\0\40fb33c2c428c39f378215a0cfac9996dc469bde

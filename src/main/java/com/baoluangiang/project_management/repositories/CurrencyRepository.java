@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
-    @Query("select c from currency c left join fetch c.projects")
+    @Query("select c from currency c")
     Optional<List<Currency>> findAllCurrency();
-    @Query("select c from currency c left join fetch c.projects where c.id = :currencyId")
+    @Query("select c from currency c where c.id = :currencyId")
     Optional<List<Currency>> findCurrencyById(Long currencyId);
-    @Query("select c from currency c left join fetch c.projects where c.code = :code")
+    @Query("select c from currency c where c.code = :code")
     Optional<List<Currency>> findCurrencyByCode(String code);
     boolean existsByCode(String code);
 }
