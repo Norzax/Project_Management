@@ -29,23 +29,23 @@ public class UserSrvController {
     }
 
     @PutMapping("/updateInfo")
-    public ResponseEntity<UserUpdateResponse> updateInfo(@RequestBody UserUpdateRequest userUpdateRequest){
+    public ResponseEntity<BaseResponse<UserUpdateResponse>> updateInfo(@RequestBody UserUpdateRequest userUpdateRequest){
         BaseResponse<UserUpdateResponse> response = userService.updateUser(userService.getLoggedInUserId().getData(), userUpdateRequest);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
-        return ResponseEntity.status(httpStatus).body(response.getData());
+        return ResponseEntity.status(httpStatus).body(response);
     }
 
     @PutMapping("/inactiveAccount")
-    public ResponseEntity<Void> inactiveAccount(){
+    public ResponseEntity<BaseResponse<Void>> inactiveAccount(){
         BaseResponse<Void> response = userService.inactiveUser(userService.getLoggedInUserId().getData());
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
-        return ResponseEntity.status(httpStatus).body(response.getData());
+        return ResponseEntity.status(httpStatus).body(response);
     }
 
     @PutMapping("/reactiveAccount/{username}")
-    public ResponseEntity<Void> reactiveAccount(@PathVariable("username") String username){
+    public ResponseEntity<BaseResponse<Void>> reactiveAccount(@PathVariable("username") String username){
         BaseResponse<Void> response = userService.activeUser(username);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
-        return ResponseEntity.status(httpStatus).body(response.getData());
+        return ResponseEntity.status(httpStatus).body(response);
     }
 }
