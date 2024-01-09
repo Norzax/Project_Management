@@ -2,17 +2,13 @@ package com.baoluangiang.project_management.controllers.admin;
 
 import com.baoluangiang.project_management.controllers.utils.ResponseStatus;
 import com.baoluangiang.project_management.models.dtos.StatusDTO;
-import com.baoluangiang.project_management.models.payloads.BaseResponse;
-import com.baoluangiang.project_management.models.payloads.StatusResponse;
+import com.baoluangiang.project_management.models.payloads.*;
 import com.baoluangiang.project_management.services.status.StatusService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +36,20 @@ public class StatusMngController {
     @GetMapping("/statusName/{statusName}")
     public ResponseEntity<BaseResponse<List<StatusResponse>>> getById(@PathVariable("statusName") String statusName){
         BaseResponse<List<StatusResponse>> response = statusService.getByStatusName(statusName);
+        HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @PutMapping("/create")
+    public ResponseEntity<BaseResponse<StatusResponse>> create(@RequestBody StatusRequest newStatus) {
+        BaseResponse<StatusResponse> response = statusService.create(newStatus);
+        HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
+        return ResponseEntity.status(httpStatus).body(response);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<BaseResponse<StatusResponse>> update(@PathVariable("id") Long id, StatusRequest statusRequest){
+        BaseResponse<StatusResponse> response = statusService.update(id, statusRequest);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }

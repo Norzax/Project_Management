@@ -1,8 +1,9 @@
 package com.baoluangiang.project_management.services.status;
 
+import com.baoluangiang.project_management.entities.Currency;
 import com.baoluangiang.project_management.entities.Status;
-import com.baoluangiang.project_management.models.dtos.StatusDTO;
 import com.baoluangiang.project_management.models.payloads.BaseResponse;
+import com.baoluangiang.project_management.models.payloads.CurrencyResponse;
 import com.baoluangiang.project_management.models.payloads.StatusRequest;
 import com.baoluangiang.project_management.models.payloads.StatusResponse;
 import com.baoluangiang.project_management.repositories.StatusRepository;
@@ -60,8 +61,57 @@ public class StatusServiceImpl implements StatusService{
     }
 
     @Override
-    public BaseResponse<StatusResponse> updateStatus(Long statusId, StatusRequest updatedInformation) {
-        return null;
+    public BaseResponse<StatusResponse> create(StatusRequest newStatus) {
+        boolean isExist = statusRepository.existsByStatusName(newStatus.getStatusName());
+        if(isExist){
+            return BaseResponse.<StatusResponse>builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("class: StatusServiceImpl + func: create(StatusRequest newStatus) + return 1")
+                    .build();
+        }
+
+        Status creatingStatus = Status.builder()
+                .statusName(newStatus.getStatusName())
+                .build();
+
+        StatusResponse createdStatus = modelMapper.map(statusRepository.save(creatingStatus), StatusResponse.class);
+
+        return BaseResponse.<StatusResponse>builder()
+                .status(HttpStatus.OK.value())
+                .data(createdStatus)
+                .message("class: StatusServiceImpl + func: create(StatusRequest newStatus) + return success")
+                .build();
+    }
+
+    @Override
+    public BaseResponse<StatusResponse> update(Long statusId, StatusRequest statusUpdateRequest) {
+        Optional<Status> optionalStatus = statusRepository.findById(statusId);
+        if(optionalStatus.isEmpty()){
+            return BaseResponse.<StatusResponse>builder()
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .message("class: StatusServiceImpl + func: update(Long statusId, StatusRequest statusUpdateRequest) + return 1")
+                    .build();
+        }
+
+        Status existingStatus = optionalStatus.get();
+
+        if (statusUpdateRequest.getStatusName() != null && statusId == existingStatus.getId()) {
+            existingStatus.setStatusName(statusUpdateRequest.getStatusName());
+        } else if (statusId != existingStatus.getId()) {
+            return BaseResponse.<StatusResponse>builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("class: StatusServiceImpl + func: update(Long statusId, StatusRequest statusUpdateRequest) + return 1")
+                    .build();
+        }
+
+        statusRepository.save(existingStatus);
+        StatusResponse updatedStatus = modelMapper.map(existingStatus, StatusResponse.class);
+
+        return BaseResponse.<StatusResponse>builder()
+                .status(HttpStatus.OK.value())
+                .data(updatedStatus)
+                .message("class: StatusServiceImpl + func: update(Long statusId, StatusRequest statusUpdateRequest) + return success")
+                .build();
     }
 
     @Override
