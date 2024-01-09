@@ -1,6 +1,5 @@
 package com.baoluangiang.project_management.services.user;
 
-import com.baoluangiang.project_management.entities.User;
 import com.baoluangiang.project_management.models.dtos.UserDTO;
 import com.baoluangiang.project_management.models.payloads.*;
 import org.springframework.stereotype.Service;
