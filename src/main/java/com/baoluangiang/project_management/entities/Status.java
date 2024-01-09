@@ -22,7 +22,6 @@ public class Status {
     @Column(name = "status_Name")
     private String statusName;
 
-    @Column
     @OneToMany(mappedBy = "status")
     private List<Project> projects;
 

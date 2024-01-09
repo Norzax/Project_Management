@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface StatusRepository extends JpaRepository<Status, Long> {
-    @Query("select s from status s left join fetch s.projects left join fetch s.tasks")
+    @Query("select s from status s")
     Optional<List<Status>> findAllStatus();
-    @Query("select s from status s left join fetch s.projects left join fetch s.tasks where s.id = :statusId")
+    @Query("select s from status s where s.id = :statusId")
     Optional<List<Status>> findStatusById(Long statusId);
-    @Query("select s from status s left join fetch s.projects left join fetch s.tasks where s.statusName = :statusName")
+    @Query("select s from status s where s.statusName = :statusName")
     Optional<List<Status>> findStatusByName(String statusName);
-    boolean existsByName(String statusName);
+    boolean existsByStatusName(String statusName);
 }

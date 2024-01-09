@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatusUpdateRequest {
+public class StatusRequest {
     private String statusName;
 }

@@ -3,6 +3,7 @@ package com.baoluangiang.project_management.controllers.admin;
 import com.baoluangiang.project_management.controllers.utils.ResponseStatus;
 import com.baoluangiang.project_management.models.dtos.StatusDTO;
 import com.baoluangiang.project_management.models.payloads.BaseResponse;
+import com.baoluangiang.project_management.models.payloads.StatusResponse;
 import com.baoluangiang.project_management.services.status.StatusService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -22,26 +23,23 @@ import java.util.List;
 public class StatusMngController {
     private final StatusService statusService;
 
-    @GetMapping
-    @RequestMapping("/all")
-    public ResponseEntity<BaseResponse<List<StatusDTO>>> getAll(){
-        BaseResponse<List<StatusDTO>> response = statusService.getAll();
+    @GetMapping("/all")
+    public ResponseEntity<BaseResponse<List<StatusResponse>>> getAll(){
+        BaseResponse<List<StatusResponse>> response = statusService.getAll();
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }
 
-    @GetMapping
-    @RequestMapping("/id/{id}")
-    public ResponseEntity<BaseResponse<List<StatusDTO>>> getById(@PathVariable("id") Long statusId){
-        BaseResponse<List<StatusDTO>> response = statusService.getById(statusId);
+    @GetMapping("/id/{id}")
+    public ResponseEntity<BaseResponse<List<StatusResponse>>> getById(@PathVariable("id") Long statusId){
+        BaseResponse<List<StatusResponse>> response = statusService.getById(statusId);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }
 
-    @GetMapping
-    @RequestMapping("/statusName/{statusName}")
-    public ResponseEntity<BaseResponse<List<StatusDTO>>> getById(@PathVariable("statusName") String statusName){
-        BaseResponse<List<StatusDTO>> response = statusService.getByStatusName(statusName);
+    @GetMapping("/statusName/{statusName}")
+    public ResponseEntity<BaseResponse<List<StatusResponse>>> getById(@PathVariable("statusName") String statusName){
+        BaseResponse<List<StatusResponse>> response = statusService.getByStatusName(statusName);
         HttpStatus httpStatus = ResponseStatus.set(response.getStatus());
         return ResponseEntity.status(httpStatus).body(response);
     }
